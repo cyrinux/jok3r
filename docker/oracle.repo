@@ -1,0 +1,3 @@
+[oracle]
+SigLevel = Optional TrustAll
+Server = http://linux.shikadi.net/arch/$repo/$arch/

@@ -1,0 +1,10 @@
+version: "3.7"
+
+services:
+  jok3r:
+    image: cyrinux/jok3r:latest
+    build:
+      context: .
+      shm_size: "2gb"
+    tty: true
+    container_name: jok3r-blackarch
