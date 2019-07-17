@@ -20,7 +20,14 @@ ENV PYTHONIOENCODING utf-8
 
 # Basic config
 WORKDIR /root
-RUN pacman-db-upgrade && pacman -Syyu --noconfirm --needed sudo git wget gnupg iputils mtr vim unzip which gawk
+
+# Prepare pacman, pacman
+RUN pacman-db-upgrade
+RUN pacman -Syyu reflector --noconfirm && \
+    reflector --verbose -l 5 --protocol http --sort rate --save /etc/pacman.d/mirrorlist && \
+    pacman -Rs reflector --noconfirm
+
+RUN pacman -Syyu --noconfirm --needed sudo git wget gnupg iputils mtr vim unzip which gawk
 RUN echo 'export PS1="\[$(tput bold)\]\[$(tput setaf 2)\]\u@jok3r-docker:\[$(tput setaf 4)\]\w\\$\[$(tput sgr0)\]\[$(tput sgr0)\] "' >> /root/.bashrc
 RUN echo 'export TERM=xterm' >> /root/.bashrc
 
@@ -48,5 +55,5 @@ RUN git config --global user.email "dummy@example.com" && git config --global us
 WORKDIR /root/jok3r
 RUN ./install-all.sh
 
-# Cleanup VM
-RUN pacman -Scc --noconfirm; rm -r /usr/share/man/*; ls -d /usr/share/locale/* | egrep -v "alias|en_GB" | xargs rm -rf
+# Cleanup VM, will take some times...
+RUN pacman -Qq | pacman -Syyu - && pacman -Scc --noconfirm; rm -r /usr/share/man/*; ls -d /usr/share/locale/* | egrep -v "alias|en_GB" | xargs rm -rf
