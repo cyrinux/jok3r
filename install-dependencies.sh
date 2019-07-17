@@ -123,7 +123,7 @@ pkg_install base-devel gcc \
     python-humanfriendly python-pyasn1
     
 pkg_install python2 python2-nmap python2-ajpy python2-colorlog python2-paramiko python2-psycopg2 python2-pip \
-    python2-beautifulsoup4 python2-bs4 python2-soupsieve python2-argparse python2-setuptools    
+    python2-beautifulsoup4 python2-bs4 python2-soupsieve python2-argparse python2-setuptools python2-pymongo python2-selenium   
 print_delimiter
 
 # -----------------------------------------------------------------------------
