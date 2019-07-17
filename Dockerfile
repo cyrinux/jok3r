@@ -1,4 +1,4 @@
-FROM koutto/jok3r
+FROM cyrinux/jok3r-slim
 LABEL maintainer="xst3nz@gmail.com"
 LABEL description="Docker Image for Jok3r - Network and Web Pentest Framework \
 * Based on Kali Linux, \
