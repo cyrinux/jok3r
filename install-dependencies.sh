@@ -19,11 +19,11 @@ print_delimiter() {
 }
 
 pkg_install() {
-    pacman -Syy --noconfirm --overwrite --needed "$@"
+    pacman -Sy --noconfirm --overwrite --needed "$@"
 }
 
 pkg_update() {
-    pacman -Syy --noconfirm --overwrite --needed "$@"
+    pacman -Syu --noconfirm --overwrite --needed "$@"
 }
 
 clear
