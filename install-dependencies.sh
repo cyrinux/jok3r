@@ -105,7 +105,7 @@ print_delimiter
 
 print_title "[~] Install Python 2.7 + 3 and useful related packages (if missing)"
 apt-get install -y --ignore-missing python python2.7 python3 python-pip python3-pip 
-apt-get install -y --ignore-missing python-dev python3-dev python-setuptools 
+apt-get install -y --ignore-missing python-dev python3-dev python-setuptools python-virtualenv
 apt-get install -y --ignore-missing python3-setuptools python3-distutils
 apt-get install -y --ignore-missing python-ipy python-nmap python3-pymysql
 apt-get install -y --ignore-missing python3-psycopg2

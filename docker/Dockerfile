@@ -1,4 +1,4 @@
-FROM kalilinux/kali-linux-docker
+FROM debian:buster-slim
 
 # NOTE: This Dockerfile is used to rebuild Jok3r Docker Image from scratch from
 # kalilinux/kali-linux-docker. It is recommended to directly pull koutto/jok3r image instead
@@ -17,7 +17,7 @@ WORKDIR /root
 RUN apt-get update && \
     apt-get -y upgrade && \
     apt-get -y dist-upgrade && \
-    apt-get install -y locales git gnupg2 && \
+    apt-get install -y locales git gnupg2 wget curl gawk sudo apt-utils procps && \
     echo 'export LC_ALL="en_US.UTF-8"' >> /root/.bashrc && \
     echo 'export LANG="en_US.UTF-8"' >> /root/.bashrc && \
     echo 'export LANGUAGE="en_US:en"' >> /root/.bashrc && \
@@ -25,6 +25,12 @@ RUN apt-get update && \
     echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen && \
     git clone https://github.com/koutto/jok3r.git 
 
+# Add Kali repository
+RUN wget https://http.kali.org/kali/pool/main/k/kali-archive-keyring/kali-archive-keyring_2018.1_all.deb && \
+    dpkg -i kali-archive-keyring_2018.1_all.deb && rm -f kali-archive-keyring_2018.1_all.deb && \
+	apt-get install -y apt-transport-https && \
+	echo "deb http://http.kali.org/kali kali-rolling main non-free contrib" | tee /etc/apt/sources.list.d/kali.list && \
+	apt-get update && apt-get install -y kali-archive-keyring
 
 # Add Sublime text for convenience for editing files if necessary
 # Will require to run with the following arguments to use GUI
@@ -41,6 +47,9 @@ ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US:en  
 ENV LC_ALL en_US.UTF-8  
 ENV PYTHONIOENCODING utf-8
+
+# Set TERM
+ENV TERM xterm-256color
 
 WORKDIR /root/jok3r
 
