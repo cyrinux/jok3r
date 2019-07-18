@@ -1166,7 +1166,12 @@ class DbController(cmd2.Cmd):
 
     nmap = argparse.ArgumentParser(
         description='Import Nmap results (XML)', 
-        formatter_class=formatter_class)
+        formatter_class=formatter_class, 
+        epilog='Note: is is recommended to run Nmap scans with -A or -sV options ' \
+            'in order to get service\nbanners in imported results. If you import ' \
+            'results from a scan run without version detection,\nyou can add ' \
+            '--version-detection to tell Jok3r to run Nmap version detection for ' \
+            'each service\nit has not been already run.')
     nmap.add_argument(
         '-n', '--no-http-recheck', 
         action  = 'store_true', 
