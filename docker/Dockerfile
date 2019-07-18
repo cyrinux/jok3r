@@ -27,7 +27,7 @@ RUN pacman -Syyu reflector --noconfirm && \
     reflector --verbose -l 5 --protocol http --sort rate --save /etc/pacman.d/mirrorlist && \
     pacman -Rs reflector --noconfirm
 
-RUN pacman -Syyu --noconfirm --needed sudo git wget gnupg iputils mtr vim unzip which gawk
+RUN pacman -Syyu --noconfirm --needed sudo git wget gnupg iputils mtr vim unzip which gawk whois traceroute
 RUN echo 'export PS1="\[$(tput bold)\]\[$(tput setaf 2)\]\u@jok3r-docker:\[$(tput setaf 4)\]\w\\$\[$(tput sgr0)\]\[$(tput sgr0)\] "' >> /root/.bashrc
 RUN echo 'export TERM=xterm' >> /root/.bashrc
 
