@@ -80,6 +80,18 @@ else
 fi
 print_delimiter
 
+
+# -----------------------------------------------------------------------------
+
+if ! [ -x "$(command -v ping)" ]; then
+    print_title "[~] Install network tools ..."
+    apt-get install -y iputils-ping traceroute whois
+else
+    print_title "[+] Network tools are already installed"
+fi
+print_delimiter
+
+
 # -----------------------------------------------------------------------------
 
 if ! [ -x "$(command -v tcpdump)" ]; then
