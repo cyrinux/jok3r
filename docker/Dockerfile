@@ -46,4 +46,5 @@ WORKDIR /root/jok3r
 
 RUN ./install-all.sh
 
-
+# Init metasploit database
+RUN sed -i 's/systemctl status ${PG_SERVICE}/service ${PG_SERVICE} status/g' /usr/bin/msfdb && msfdb reinit
