@@ -25,6 +25,7 @@ RUN apt-get update && \
     echo 'export PS1="\[$(tput bold)\]\[$(tput setaf 2)\]\u@jok3r-docker:\[$(tput setaf 4)\]\w\\$\[$(tput sgr0)\]\[$(tput sgr0)\] "' >> /root/.bashrc && \
     echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen && \
     echo "gem: --no-rdoc --no-ri" >> /root/.gemrc && \
+    echo 'jok3r() { python3 ~/jok3r/jok3r.py "$@"; }' >> /root/.bashrc && \
     git clone --single-branch --branch slim_fast https://github.com/cyrinux/jok3r.git 
 
 # Add Kali repository
@@ -42,6 +43,9 @@ RUN wget -qO - https://download.sublimetext.com/sublimehq-pub.gpg | apt-key add 
 	apt-get install -y apt-transport-https && \
 	echo "deb https://download.sublimetext.com/ apt/stable/" | tee /etc/apt/sources.list.d/sublime-text.list && \
 	apt-get update && apt-get install -y sublime-text
+
+# Dummy git config
+RUN git config --global user.email "dummy@example.com" && git config --global user.name "Dummy Dummy"
 
 # Set the locale
 RUN locale-gen en_US.UTF-8  
