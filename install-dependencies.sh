@@ -211,6 +211,16 @@ print_delimiter
 
 # -----------------------------------------------------------------------------
 
+if ! [ -x "$(command -v nc)" ]; then
+    print_title "[~] Install netcat"
+    apt-get install -y --ignore-missing netcat
+else
+    print_title "[+] Netcat is already installed"
+fi
+print_delimiter
+
+# -----------------------------------------------------------------------------
+
 if ! [ -x "$(command -v firefox)" ]; then
     print_title "[~] Install Firefox (for HTML reports and web screenshots)"
     apt-get install -y --ignore-missing firefox-esr
