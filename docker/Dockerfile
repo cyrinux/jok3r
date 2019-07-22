@@ -55,6 +55,8 @@ ENV TERM xterm-256color
 
 WORKDIR /root/jok3r
 
+EXPOSE 8443
+
 RUN ./install-all.sh && rm -rf /var/lib/apt/lists/*
 
 
