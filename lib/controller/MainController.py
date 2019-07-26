@@ -12,14 +12,11 @@ from lib.controller.AttackController import AttackController
 
 
 class MainController(Controller):
-
     def run(self):
         """Run the adapted controller"""
         {
-            Mode.TOOLBOX : ToolboxController,
-            Mode.INFO    : InfoController,
-            Mode.DB      : DbController,
-            Mode.ATTACK  : AttackController,
+            Mode.TOOLBOX: ToolboxController,
+            Mode.INFO: InfoController,
+            Mode.DB: DbController,
+            Mode.ATTACK: AttackController,
         }.get(self.arguments.mode)(self.arguments, self.settings, self.sqlsess).run()
-
-

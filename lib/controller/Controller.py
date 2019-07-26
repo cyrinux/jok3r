@@ -4,8 +4,8 @@
 ### Core > Controller (interface)
 ###
 
-class Controller:
 
+class Controller:
     def __init__(self, arguments, settings, sqlsession):
         """
         Controller interface.
@@ -15,8 +15,5 @@ class Controller:
         :param Session sqlsession: SQLAlchemy session
         """
         self.arguments = arguments
-        self.settings  = settings
-        self.sqlsess   = sqlsession
-
-
-
+        self.settings = settings
+        self.sqlsess = sqlsession

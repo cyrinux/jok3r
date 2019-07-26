@@ -9,11 +9,7 @@ from lib.smartmodules.MatchstringsProcessor import MatchstringsProcessor
 
 
 class SmartPostcheck:
-
-    def __init__(self, 
-                 service, 
-                 tool_name, 
-                 cmd_output):
+    def __init__(self, service, tool_name, cmd_output):
         """
         SmartPostcheck class allows to run code after a check during an attack 
         against one service. It is useful to analyze/process command outputs
@@ -28,20 +24,16 @@ class SmartPostcheck:
         self.tool_name = tool_name
         self.cmd_output = cmd_output
         self.cu = ContextUpdater(self.service)
-        self.processor = MatchstringsProcessor(self.service, 
-                                               self.tool_name,
-                                               self.cmd_output,
-                                               self.cu)
-
+        self.processor = MatchstringsProcessor(
+            self.service, self.tool_name, self.cmd_output, self.cu
+        )
 
     def run(self):
         """Run postcheck processing"""
 
-        logger.smartinfo('SmartPostcheck processing to update context...')
+        logger.smartinfo("SmartPostcheck processing to update context...")
         self.processor.detect_credentials()
         self.processor.detect_specific_options()
         self.processor.detect_products()
         self.processor.detect_vulns()
         self.cu.update()
-
-

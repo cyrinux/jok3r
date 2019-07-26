@@ -19,73 +19,78 @@ from lib.output.Logger import logger
 
 
 class ProductsRequester(Requester):
-
     def __init__(self, sqlsession):
         query = sqlsession.query(Product).join(Service).join(Host).join(Mission)
         super().__init__(sqlsession, query)
 
-
-    #------------------------------------------------------------------------------------
+    # ------------------------------------------------------------------------------------
 
     def show(self):
         """Show selected products"""
         results = self.get_results()
 
         if not results:
-            logger.warning('No product to display')
+            logger.warning("No product to display")
         else:
             data = list()
             columns = [
-                'IP',
-                'Hostname',
-                'Service',
-                'Port',
-                'Proto',
-                'Type',
-                'Name',
-                'Version',
+                "IP",
+                "Hostname",
+                "Service",
+                "Port",
+                "Proto",
+                "Type",
+                "Name",
+                "Version",
             ]
             for r in results:
-                data.append([
-                    r.service.host.ip,
-                    r.service.host.hostname \
-                        if r.service.host.hostname != str(r.service.host.ip) else '',
-                    r.service.name,
-                    r.service.port,
-                    {Protocol.TCP: 'tcp', Protocol.UDP: 'udp'}.get(r.service.protocol),
-                    r.type,
-                    r.name,
-                    r.version,
-                ])
+                data.append(
+                    [
+                        r.service.host.ip,
+                        r.service.host.hostname
+                        if r.service.host.hostname != str(r.service.host.ip)
+                        else "",
+                        r.service.name,
+                        r.service.port,
+                        {Protocol.TCP: "tcp", Protocol.UDP: "udp"}.get(
+                            r.service.protocol
+                        ),
+                        r.type,
+                        r.name,
+                        r.version,
+                    ]
+                )
             Output.table(columns, data, hrules=False)
 
-
-    #------------------------------------------------------------------------------------
+    # ------------------------------------------------------------------------------------
 
     def delete(self):
         """Delete selected products"""
         results = self.get_results()
         if not results:
-            logger.error('No matching product')
+            logger.error("No matching product")
         else:
             for r in results:
-                logger.info('Product deleted: {type}={name}{version} for ' \
-                    'service={service} host={ip} port={port}/{proto}'.format(
-                        type    = r.type,
-                        name    = r.name,
-                        version = ' '+r.version if r.version else '',
-                        service = r.service.name,
-                        ip      = r.service.host.ip,
-                        port    = r.service.port,
-                        proto   = {Protocol.TCP: 'tcp', Protocol.UDP: 'udp'}.get(
-                            r.service.protocol)))
+                logger.info(
+                    "Product deleted: {type}={name}{version} for "
+                    "service={service} host={ip} port={port}/{proto}".format(
+                        type=r.type,
+                        name=r.name,
+                        version=" " + r.version if r.version else "",
+                        service=r.service.name,
+                        ip=r.service.host.ip,
+                        port=r.service.port,
+                        proto={Protocol.TCP: "tcp", Protocol.UDP: "udp"}.get(
+                            r.service.protocol
+                        ),
+                    )
+                )
 
                 self.sqlsess.delete(r)
 
             self.sqlsess.commit()
 
-
-    #------------------------------------------------------------------------------------
+    # ------------------------------------------------------------------------------------
 
     def order_by(self, column):
         """
@@ -93,19 +98,20 @@ class ProductsRequester(Requester):
         :param str column: Column name to order by
         """
         mapping = {
-            'ip'       : Host.ip,
-            'hostname' : Host.hostname,
-            'service'  : Service.name,
-            'port'     : Service.port,
-            'proto'    : Service.protocol,
-            'type'     : Product.type,
-            'name'     : Product.name,
-            'version'  : Product.version,
+            "ip": Host.ip,
+            "hostname": Host.hostname,
+            "service": Service.name,
+            "port": Service.port,
+            "proto": Service.protocol,
+            "type": Product.type,
+            "name": Product.name,
+            "version": Product.version,
         }
 
         if column.lower() not in mapping.keys():
-            logger.warning('Ordering by column {col} is not supported'.format(
-                col=column.lower()))
+            logger.warning(
+                "Ordering by column {col} is not supported".format(col=column.lower())
+            )
             return
 
         super().order_by(mapping[column.lower()])

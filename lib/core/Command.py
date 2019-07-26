@@ -88,12 +88,9 @@ from apikeys import API_KEYS
 
 
 class Command:
-
-    def __init__(self, 
-                 cmdtype, 
-                 cmdline, 
-                 context_requirements=None, 
-                 services_config=None):
+    def __init__(
+        self, cmdtype, cmdline, context_requirements=None, services_config=None
+    ):
         """
         Construct Command object.
 
@@ -103,11 +100,10 @@ class Command:
         :param ServicesConfig services_config: Services configuration (for RUN)
         """
         self.cmdtype = cmdtype
-        self.cmdline = cmdline # Keep the raw command line with tags untouched
-        self.formatted_cmdline = ''
+        self.cmdline = cmdline  # Keep the raw command line with tags untouched
+        self.formatted_cmdline = ""
         self.context_requirements = context_requirements
         self.services_config = services_config
-        
 
     def get_cmdline(self, directory, target=None, arguments=None):
         """
@@ -130,10 +126,12 @@ class Command:
         if self.cmdtype == CmdType.RUN:
 
             # Return now is missing parameters
-            if target is None \
-               or arguments is None \
-               or self.context_requirements is None \
-               or self.services_config is None:
+            if (
+                target is None
+                or arguments is None
+                or self.context_requirements is None
+                or self.services_config is None
+            ):
 
                 return None
 
@@ -152,9 +150,13 @@ class Command:
                 self.__replace_tag_localip()
 
                 # Bruteforce options tags replacement
-                self.__replace_tag_bruteforce_option('USERLIST', arguments.args.userlist)
-                self.__replace_tag_bruteforce_option('PASSLIST', arguments.args.passlist)
-                #self.__replace_tag_bruteforce_option('WEBLIST', arguments.args.weblist)
+                self.__replace_tag_bruteforce_option(
+                    "USERLIST", arguments.args.userlist
+                )
+                self.__replace_tag_bruteforce_option(
+                    "PASSLIST", arguments.args.passlist
+                )
+                # self.__replace_tag_bruteforce_option('WEBLIST', arguments.args.weblist)
 
                 # Credentials tags replacement
                 self.__replace_tags_credentials(target)
@@ -171,12 +173,11 @@ class Command:
         self.__replace_tag_toolboxdir(TOOLBOX_DIR)
 
         if directory:
-            return 'cd {dir}; {cmd}'.format(dir=directory, cmd=self.formatted_cmdline)
+            return "cd {dir}; {cmd}".format(dir=directory, cmd=self.formatted_cmdline)
         else:
             return self.formatted_cmdline
 
-
-    #------------------------------------------------------------------------------------
+    # ------------------------------------------------------------------------------------
     # General Tags Replacement
 
     def __replace_tag_ip(self, ip):
@@ -185,9 +186,8 @@ class Command:
 
         :param str ip: Target IP address
         """
-        pattern = re.compile('\[IP\]', re.IGNORECASE)
+        pattern = re.compile("\[IP\]", re.IGNORECASE)
         self.formatted_cmdline = pattern.sub(ip, self.formatted_cmdline)
-
 
     def __replace_tag_url(self, url):
         """
@@ -195,8 +195,9 @@ class Command:
 
         :param str url: Target URL
         """
-        if not url: return
-        pattern = re.compile('\[URL\]', re.IGNORECASE)
+        if not url:
+            return
+        pattern = re.compile("\[URL\]", re.IGNORECASE)
         self.formatted_cmdline = pattern.sub(url, self.formatted_cmdline)
 
     def __replace_tag_domain(self, url):
@@ -205,13 +206,14 @@ class Command:
 
         :param str url: Target URL
         """
-        if not url: return
-        pattern = re.compile('\[DOMAIN\]', re.IGNORECASE)
+        if not url:
+            return
+        pattern = re.compile("\[DOMAIN\]", re.IGNORECASE)
         try:
             res = get_tld(url, as_object=True)
             domain = res.fld
         except Exception as e:
-            domain = ''
+            domain = ""
         self.formatted_cmdline = pattern.sub(domain, self.formatted_cmdline)
 
     def __replace_tag_uripath(self, url):
@@ -220,16 +222,16 @@ class Command:
 
         :param str url: Target URL
         """
-        if not url: return
-        pattern = re.compile('\[URIPATH\]', re.IGNORECASE)
+        if not url:
+            return
+        pattern = re.compile("\[URIPATH\]", re.IGNORECASE)
         try:
             o = urllib.parse.urlparse(url)
-            uripath = o.path or '/'
+            uripath = o.path or "/"
         except Exception as e:
-            uripath = '/'
+            uripath = "/"
 
         self.formatted_cmdline = pattern.sub(uripath, self.formatted_cmdline)
-
 
     def __replace_tag_host(self, host, ip):
         """
@@ -239,12 +241,11 @@ class Command:
         :param str host: Target hostname
         :param str ip: Target IP address
         """
-        pattern = re.compile('\[HOST\]', re.IGNORECASE)
+        pattern = re.compile("\[HOST\]", re.IGNORECASE)
         if host:
             self.formatted_cmdline = pattern.sub(host, self.formatted_cmdline)
         else:
             self.formatted_cmdline = pattern.sub(ip, self.formatted_cmdline)
-
 
     def __replace_tag_port(self, port):
         """
@@ -252,9 +253,8 @@ class Command:
 
         :param int port: Target port number
         """
-        pattern = re.compile('\[PORT\]', re.IGNORECASE)
+        pattern = re.compile("\[PORT\]", re.IGNORECASE)
         self.formatted_cmdline = pattern.sub(str(port), self.formatted_cmdline)
-
 
     def __replace_tag_protocol(self, protocol):
         """
@@ -262,9 +262,8 @@ class Command:
 
         :param str protocol: Target protocol (tcp or udp)
         """
-        pattern = re.compile('\[PROTOCOL\]', re.IGNORECASE)
+        pattern = re.compile("\[PROTOCOL\]", re.IGNORECASE)
         self.formatted_cmdline = pattern.sub(protocol, self.formatted_cmdline)
-
 
     def __replace_tag_service(self, service):
         """
@@ -272,9 +271,8 @@ class Command:
 
         :param str service: Target service name
         """
-        pattern = re.compile('\[SERVICE\]', re.IGNORECASE)
-        self.formatted_cmdline = pattern.sub(service, self.formatted_cmdline)     
-
+        pattern = re.compile("\[SERVICE\]", re.IGNORECASE)
+        self.formatted_cmdline = pattern.sub(service, self.formatted_cmdline)
 
     def __replace_tag_toolboxdir(self, toolbox_dir):
         """
@@ -282,9 +280,8 @@ class Command:
 
         :param str toolbox_dir: Toolbox directory
         """
-        pattern = re.compile('\[TOOLBOXDIR\]', re.IGNORECASE)
+        pattern = re.compile("\[TOOLBOXDIR\]", re.IGNORECASE)
         self.formatted_cmdline = pattern.sub(toolbox_dir, self.formatted_cmdline)
-
 
     def __replace_tag_webshellsdir(self, webshells_dir):
         """
@@ -292,9 +289,8 @@ class Command:
 
         :param str webshells_dir: Webshells directory
         """
-        pattern = re.compile('\[WEBSHELLSDIR\]', re.IGNORECASE)
+        pattern = re.compile("\[WEBSHELLSDIR\]", re.IGNORECASE)
         self.formatted_cmdline = pattern.sub(webshells_dir, self.formatted_cmdline)
-
 
     def __replace_tag_wordlistsdir(self, wordlists_dir):
         """
@@ -302,21 +298,19 @@ class Command:
 
         :param str wordlists_dir: Wordlists directory
         """
-        pattern = re.compile('\[WORDLISTSDIR\]', re.IGNORECASE)
+        pattern = re.compile("\[WORDLISTSDIR\]", re.IGNORECASE)
         self.formatted_cmdline = pattern.sub(wordlists_dir, self.formatted_cmdline)
-
 
     def __replace_tag_localip(self):
         """
         Replace tag [LOCALIP] by the local IP address in self.formatted_cmdline.
         """
-        pattern = re.compile('\[LOCALIP\]', re.IGNORECASE)
-        self.formatted_cmdline = pattern.sub(NetUtils.get_local_ip_address(), 
-                                             self.formatted_cmdline)
-         
+        pattern = re.compile("\[LOCALIP\]", re.IGNORECASE)
+        self.formatted_cmdline = pattern.sub(
+            NetUtils.get_local_ip_address(), self.formatted_cmdline
+        )
 
-
-    #------------------------------------------------------------------------------------
+    # ------------------------------------------------------------------------------------
     # Bruteforce Options Tags Replacement
 
     def __replace_tag_bruteforce_option(self, tagname, arg_value):
@@ -332,25 +326,23 @@ class Command:
             --passlist, --weblist). None if not available. 
         """
         pattern = re.compile(
-            '\['+tagname.upper()+'\s+default\s*=\s*[\'"](?P<default>.*?)[\'"]\s*\]',
-            re.IGNORECASE)
+            "\[" + tagname.upper() + "\s+default\s*=\s*['\"](?P<default>.*?)['\"]\s*\]",
+            re.IGNORECASE,
+        )
         m = pattern.search(self.formatted_cmdline)
 
         if m:
             # Replace by value passed as argument by user if available
             if arg_value:
-                self.formatted_cmdline = pattern.sub(
-                    arg_value,
-                    self.formatted_cmdline)
+                self.formatted_cmdline = pattern.sub(arg_value, self.formatted_cmdline)
 
             # By default, use the specified value in tag as path
             else:
                 self.formatted_cmdline = pattern.sub(
-                    WORDLISTS_DIR + '/' + m.group('default'),
-                    self.formatted_cmdline)
+                    WORDLISTS_DIR + "/" + m.group("default"), self.formatted_cmdline
+                )
 
-
-    #------------------------------------------------------------------------------------
+    # ------------------------------------------------------------------------------------
     # Credentials Tags Replacement
 
     def __replace_tags_credentials(self, target):
@@ -364,11 +356,11 @@ class Command:
 
         :param Target target: Target
         """
-        if self.context_requirements.auth_status not in (USER_ONLY, POST_AUTH): 
+        if self.context_requirements.auth_status not in (USER_ONLY, POST_AUTH):
             return
 
-        cmd = ''
-        if target.service.name == 'http':
+        cmd = ""
+        if target.service.name == "http":
             auth_type = self.context_requirements.auth_type
         else:
             auth_type = None
@@ -377,25 +369,28 @@ class Command:
         if self.context_requirements.auth_status == USER_ONLY:
             usernames = target.get_usernames_only(auth_type)
             for user in usernames:
-                cmd += 'echo $(tput bold)Run command for username={username} :' \
-                    '$(tput sgr0); '.format(username=user)
-                cmd += self.__replace_tag_username(self.formatted_cmdline, user) + '; '
+                cmd += (
+                    "echo $(tput bold)Run command for username={username} :"
+                    "$(tput sgr0); ".format(username=user)
+                )
+                cmd += self.__replace_tag_username(self.formatted_cmdline, user) + "; "
 
         # Auth status set to POST_AUTH
         elif self.context_requirements.auth_status == POST_AUTH:
             userpass = target.get_userpass(auth_type)
-            for user,password in userpass:
+            for user, password in userpass:
                 tmp = self.__replace_tag_username(self.formatted_cmdline, user)
                 tmp = self.__replace_tag_password(tmp, password)
-                cmd += 'echo $(tput bold)Run command for creds={username}:' \
-                    '{password} :$(tput sgr0); '.format(
-                        username=user, 
-                        password=password)
-                cmd += tmp + '; '
+                cmd += (
+                    "echo $(tput bold)Run command for creds={username}:"
+                    "{password} :$(tput sgr0); ".format(
+                        username=user, password=password
+                    )
+                )
+                cmd += tmp + "; "
 
-        if cmd != '':
+        if cmd != "":
             self.formatted_cmdline = cmd
-
 
     def __replace_tag_username(self, cmd, username):
         """
@@ -406,9 +401,8 @@ class Command:
         :return: Formatted command line
         :rtype: str
         """
-        pattern = re.compile('\[USERNAME\]', re.IGNORECASE)
+        pattern = re.compile("\[USERNAME\]", re.IGNORECASE)
         return pattern.sub(username, cmd)
-
 
     def __replace_tag_password(self, cmd, password):
         """
@@ -419,11 +413,10 @@ class Command:
         :return: Formatted command line
         :rtype: str
         """
-        pattern = re.compile('\[PASSWORD\]', re.IGNORECASE)
+        pattern = re.compile("\[PASSWORD\]", re.IGNORECASE)
         return pattern.sub(password, cmd)
 
-
-    #------------------------------------------------------------------------------------
+    # ------------------------------------------------------------------------------------
     # Specific Options Tags Replacement
 
     def __replace_tags_specific(self, target):
@@ -433,21 +426,19 @@ class Command:
         :param Target target: Target
         """
         service = target.get_service_name()
-        specific_options = self.services_config[service]['specific_options'].items()
+        specific_options = self.services_config[service]["specific_options"].items()
 
-        for option,type_ in specific_options:
+        for option, type_ in specific_options:
             value = target.get_specific_option_value(option)
 
-
             if type_ == OptionType.BOOLEAN:
-                self.__replace_tag_specific_boolean(option, value)   
+                self.__replace_tag_specific_boolean(option, value)
 
-            elif type_ == OptionType.LIST:  
+            elif type_ == OptionType.LIST:
                 self.__replace_tag_specific_list(option, value)
 
             elif type_ == OptionType.VAR:
                 self.__replace_tag_specific_var(option, value)
-
 
     def __replace_tag_specific_boolean(self, name, value):
         """
@@ -459,19 +450,19 @@ class Command:
         """
         try:
             pattern = re.compile(
-                r'\['+name.upper()+'\s+true\s*=\s*[\'"](?P<option>.*?)[\'"]\s*\]', 
-                re.IGNORECASE)
+                r"\[" + name.upper() + "\s+true\s*=\s*['\"](?P<option>.*?)['\"]\s*\]",
+                re.IGNORECASE,
+            )
             m = pattern.search(self.formatted_cmdline)
             if value == True:
                 self.formatted_cmdline = pattern.sub(
-                    m.group('option'), self.formatted_cmdline)
+                    m.group("option"), self.formatted_cmdline
+                )
             else:
-                self.formatted_cmdline = pattern.sub(
-                    '', self.formatted_cmdline)
+                self.formatted_cmdline = pattern.sub("", self.formatted_cmdline)
 
         except Exception as e:
-            pass            
-
+            pass
 
     def __replace_tag_specific_list(self, name, value):
         """
@@ -483,23 +474,27 @@ class Command:
         """
         try:
             pattern = regex.compile(
-                r'\['+name.upper()+'(?:\s+(?P<name>\w+)\s*=\s*[\'"]' \
-                r'(?P<value>[ a-zA-Z0-9_,;:-]*)[\'"])+\s*\]', 
-                regex.IGNORECASE)
+                r"\[" + name.upper() + "(?:\s+(?P<name>\w+)\s*=\s*['\"]"
+                r'(?P<value>[ a-zA-Z0-9_,;:-]*)[\'"])+\s*\]',
+                regex.IGNORECASE,
+            )
             m = pattern.search(self.formatted_cmdline)
             capt = m.capturesdict()
 
             if value is not None:
-                replacement = capt['value'][capt['name'].index(value)]
-                self.formatted_cmdline = pattern.sub(replacement, self.formatted_cmdline)
-            elif 'default' in [e.lower() for e in capt['name']]:
-                replacement = capt['value'][capt['name'].index('default')]
-                self.formatted_cmdline = pattern.sub(replacement, self.formatted_cmdline)
+                replacement = capt["value"][capt["name"].index(value)]
+                self.formatted_cmdline = pattern.sub(
+                    replacement, self.formatted_cmdline
+                )
+            elif "default" in [e.lower() for e in capt["name"]]:
+                replacement = capt["value"][capt["name"].index("default")]
+                self.formatted_cmdline = pattern.sub(
+                    replacement, self.formatted_cmdline
+                )
             else:
-                self.formatted_cmdline = pattern.sub('', self.formatted_cmdline)
+                self.formatted_cmdline = pattern.sub("", self.formatted_cmdline)
         except Exception as e:
             pass
-
 
     def __replace_tag_specific_var(self, name, value):
         """
@@ -513,63 +508,66 @@ class Command:
 
         :param str name: Specific option name
         :param str value: Specific option value
-        """        
+        """
         try:
             pattern = re.compile(
-                r'\['+name.upper()+'\s+set\s*=\s*[\'"](?P<set>.*?)[\'"]\s*' \
-                r'(default\s*=\s*[\'"](?P<default>.*?)[\'"])?\s*\]', 
-                re.IGNORECASE)
+                r"\[" + name.upper() + "\s+set\s*=\s*['\"](?P<set>.*?)['\"]\s*"
+                r'(default\s*=\s*[\'"](?P<default>.*?)[\'"])?\s*\]',
+                re.IGNORECASE,
+            )
             m = pattern.search(self.formatted_cmdline)
 
             if value is not None:
-                replacement = m.group('set').replace('_VAR_', value)
+                replacement = m.group("set").replace("_VAR_", value)
                 self.formatted_cmdline = pattern.sub(
-                    replacement, self.formatted_cmdline)
-            elif 'default' in m.groupdict():
+                    replacement, self.formatted_cmdline
+                )
+            elif "default" in m.groupdict():
                 self.formatted_cmdline = pattern.sub(
-                    m.group('default'), self.formatted_cmdline)
+                    m.group("default"), self.formatted_cmdline
+                )
             else:
-                self.formatted_cmdline = pattern.sub(
-                    '', self.formatted_cmdline)
+                self.formatted_cmdline = pattern.sub("", self.formatted_cmdline)
         except Exception as e:
-            pass    
+            pass
 
-
-    #------------------------------------------------------------------------------------
+    # ------------------------------------------------------------------------------------
     # Product Tags Replacement
 
     def __replace_tags_product(self, target):
         """
         """
         service = target.get_service_name()
-        products = self.services_config[service]['products']
+        products = self.services_config[service]["products"]
 
         for product_type in products:
             name, version = target.get_product_name_version(product_type)
-            name = name or ''
-            version = version or ''
+            name = name or ""
+            version = version or ""
 
             # Handle case where name stores vendor name to avoid ambiguity
-            if '/' in name:
-                vendor, name = name.split('/', maxsplit=1)
+            if "/" in name:
+                vendor, name = name.split("/", maxsplit=1)
             else:
-                vendor = ''
+                vendor = ""
 
-            pattern = re.compile('\['+product_type+'-VENDOR\]', re.IGNORECASE)
+            pattern = re.compile("\[" + product_type + "-VENDOR\]", re.IGNORECASE)
             self.formatted_cmdline = pattern.sub(vendor, self.formatted_cmdline)
 
-            pattern = re.compile('\['+product_type+'-NAME\]', re.IGNORECASE)
+            pattern = re.compile("\[" + product_type + "-NAME\]", re.IGNORECASE)
             self.formatted_cmdline = pattern.sub(name, self.formatted_cmdline)
 
-            pattern = re.compile('\['+product_type+'-VERSION\]', re.IGNORECASE)
-            self.formatted_cmdline = pattern.sub(version, self.formatted_cmdline)        
+            pattern = re.compile("\[" + product_type + "-VERSION\]", re.IGNORECASE)
+            self.formatted_cmdline = pattern.sub(version, self.formatted_cmdline)
 
-            pattern = re.compile('\['+product_type+'-VERSION_MAJOR\]', re.IGNORECASE)
-            self.formatted_cmdline = pattern.sub(version.split('.')[0], 
-                self.formatted_cmdline)          
- 
+            pattern = re.compile(
+                "\[" + product_type + "-VERSION_MAJOR\]", re.IGNORECASE
+            )
+            self.formatted_cmdline = pattern.sub(
+                version.split(".")[0], self.formatted_cmdline
+            )
 
-    #------------------------------------------------------------------------------------
+    # ------------------------------------------------------------------------------------
     # API key Replacement
 
     def __replace_tag_apikey(self):
@@ -582,21 +580,22 @@ class Command:
         the API key is not provided in "apikeys.py"
 
         :param str name: API key name (e.g. "vulners")
-        """        
+        """
         try:
             pattern = re.compile(
-                r'\[APIKEY\s+name\s*=\s*[\'"](?P<name>.*?)[\'"]\s*\]',
-                re.IGNORECASE)
+                r'\[APIKEY\s+name\s*=\s*[\'"](?P<name>.*?)[\'"]\s*\]', re.IGNORECASE
+            )
             m = pattern.search(self.formatted_cmdline)
 
             if m:
-                name = m.group('name')
+                name = m.group("name")
 
                 if name in API_KEYS.keys():
                     self.formatted_cmdline = pattern.sub(
-                        API_KEYS[name], self.formatted_cmdline)
+                        API_KEYS[name], self.formatted_cmdline
+                    )
                 else:
-                    self.formatted_cmdline = pattern.sub('', self.formatted_cmdline)
+                    self.formatted_cmdline = pattern.sub("", self.formatted_cmdline)
 
         except Exception as e:
-            pass  
+            pass

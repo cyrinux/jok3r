@@ -5,7 +5,4 @@
 #
 # Vulners: https://vulners.com/
 # Shodan: https://www.shodan.io/
-API_KEYS = {
-	'vulners': '',
-	'shodan': '',
-}
+API_KEYS = {"vulners": "", "shodan": ""}

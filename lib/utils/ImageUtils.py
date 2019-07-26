@@ -8,7 +8,6 @@ from PIL import Image
 
 
 class ImageUtils:
-
     @staticmethod
     def create_thumbnail(source, width, height):
         """
@@ -26,13 +25,12 @@ class ImageUtils:
             image = Image.open(io.BytesIO(source))
             image.thumbnail(size, Image.ANTIALIAS)
             thumbio = io.BytesIO()
-            image.save(thumbio, format='PNG')
-            thumbio.seek(0) # Important: pointer back to beginning of "memory file"
+            image.save(thumbio, format="PNG")
+            thumbio.seek(0)  # Important: pointer back to beginning of "memory file"
             thumb = thumbio.read()
         except:
             thumb = None
         return thumb
-
 
     @staticmethod
     def save_image(source, filepath):
@@ -46,7 +44,7 @@ class ImageUtils:
         """
         try:
             image = Image.open(io.BytesIO(source))
-            image.save(filepath, format='PNG')
+            image.save(filepath, format="PNG")
         except:
             return False
         return True

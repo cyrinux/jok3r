@@ -7,7 +7,6 @@ from lib.db.Mission import Mission
 
 
 class Requester:
-
     def __init__(self, sqlsession, query):
         """
         Interface for Requesters.
@@ -19,10 +18,9 @@ class Requester:
         self.query = query
         self.results = None
         self.filter_applied = False
-        self.current_mission = 'default'
+        self.current_mission = "default"
 
-
-    #------------------------------------------------------------------------------------
+    # ------------------------------------------------------------------------------------
 
     def select_mission(self, mission):
         """
@@ -32,8 +30,7 @@ class Requester:
         self.current_mission = mission
         self.query = self.query.filter(Mission.name == mission)
 
-
-    #------------------------------------------------------------------------------------
+    # ------------------------------------------------------------------------------------
 
     def add_filter(self, filter_):
         """
@@ -45,8 +42,7 @@ class Requester:
             self.filter_applied = True
             self.query = self.query.filter(filt)
 
-
-    #------------------------------------------------------------------------------------
+    # ------------------------------------------------------------------------------------
 
     def order_by(self, column):
         """
@@ -55,13 +51,11 @@ class Requester:
         """
         self.query = self.query.order_by(column)
 
-
-    #------------------------------------------------------------------------------------
+    # ------------------------------------------------------------------------------------
 
     def get_results(self):
         """Retrieve all results"""
         return self.query.all()
-
 
     def get_first_result(self):
         """Retrieve one result"""

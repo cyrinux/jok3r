@@ -12,19 +12,11 @@ from lib.smartmodules.matchstrings.MatchStrings import options_match
 #   }
 # }
 
-options_match['http'] = {
-    
-    'metasploit': {
-        'has (SHAREPOINT )?DAV ENABLED': {
-            'name': 'webdav',
-            'value': 'true',
-        },
+options_match["http"] = {
+    "metasploit": {
+        "has (SHAREPOINT )?DAV ENABLED": {"name": "webdav", "value": "true"}
     },
-    'nmap': {
-    	'weblogic-t3-info: T3 protocol in use': {
-    		'name': 'weblogic-t3',
-    		'value': 'true',
-    	},
+    "nmap": {
+        "weblogic-t3-info: T3 protocol in use": {"name": "weblogic-t3", "value": "true"}
     },
-
 }

@@ -6,8 +6,8 @@
 from lib.output.Output import Output
 from lib.utils.StringUtils import StringUtils
 
-class AttackProfile:
 
+class AttackProfile:
     def __init__(self, name, description, checks):
         """
         Create an Attack Profile.
@@ -22,7 +22,6 @@ class AttackProfile:
         self.description = description
         self.checks = checks
 
-
     def is_service_supported(self, service):
         """
         Check if the Attack Profile can be run against a given service
@@ -32,7 +31,6 @@ class AttackProfile:
         :rtype: bool
         """
         return service.lower() in self.checks
-
 
     def get_checks_for_service(self, service):
         """
@@ -44,23 +42,20 @@ class AttackProfile:
         """
         return self.checks.get(service)
 
-
     def __repr__(self):
         return self.name
 
 
-#----------------------------------------------------------------------------------------
+# ----------------------------------------------------------------------------------------
 
 
 class AttackProfiles:
-
     def __init__(self, profiles=list()):
         """
         """
         self.profiles = profiles
 
-
-    #------------------------------------------------------------------------------------
+    # ------------------------------------------------------------------------------------
     # Simple Operations
 
     def add(self, profile):
@@ -76,7 +71,6 @@ class AttackProfiles:
         self.profiles.append(profile)
         return True
 
-
     def get(self, name):
         """ 
         Get attack profile by name.
@@ -90,8 +84,7 @@ class AttackProfiles:
                 return p
         return None
 
-
-    #------------------------------------------------------------------------------------
+    # ------------------------------------------------------------------------------------
     # Output Methods
 
     def show(self, filter_service=None):
@@ -102,28 +95,28 @@ class AttackProfiles:
         """
 
         data = list()
-        columns = [
-            'Profile',
-            'Description',
-        ]
+        columns = ["Profile", "Description"]
 
         for p in self.profiles:
-            #print(p.checks)
+            # print(p.checks)
             if not filter_service or p.is_service_supported(filter_service):
-                data.append([
-                    Output.colored(p.name, attrs='bold'),
-                    StringUtils.wrap(p.description, 120)
-                ])
+                data.append(
+                    [
+                        Output.colored(p.name, attrs="bold"),
+                        StringUtils.wrap(p.description, 120),
+                    ]
+                )
 
         if filter_service:
-            service = 'for service {}'.format(filter_service.upper()) 
+            service = "for service {}".format(filter_service.upper())
         else:
-            service = ''
-        Output.title1('Attack Profiles {service}'.format(service=service))
+            service = ""
+        Output.title1("Attack Profiles {service}".format(service=service))
         Output.table(columns, data, hrules=False)
 
         if not filter_service:
             print
-            Output.print('Run "info --attack-profiles <service>" to see the attack ' \
-                'profiles supported for a given service.')
-
+            Output.print(
+                'Run "info --attack-profiles <service>" to see the attack '
+                "profiles supported for a given service."
+            )

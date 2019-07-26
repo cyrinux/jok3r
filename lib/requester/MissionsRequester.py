@@ -20,21 +20,18 @@ from lib.output.Output import Output
 
 
 class MissionsRequester(Requester):
-
     def __init__(self, sqlsession):
         query = sqlsession.query(Mission)
         super().__init__(sqlsession, query)
 
-
-    #------------------------------------------------------------------------------------
+    # ------------------------------------------------------------------------------------
 
     def get_list_mission_names(self):
         """Get list of missions in the database"""
         results = self.get_results()
-        return [ r.name for r in results ]
+        return [r.name for r in results]
 
-
-    #------------------------------------------------------------------------------------
+    # ------------------------------------------------------------------------------------
 
     def show(self, highlight=None):
         """
@@ -43,29 +40,26 @@ class MissionsRequester(Requester):
         """
         results = self.get_results()
         if not results:
-            logger.warning('No matching mission')
+            logger.warning("No matching mission")
         else:
             data = list()
-            columns = [
-                'Mission',
-                'Creation date',
-                'Comment',
-                '# Hosts',
-                '# Services',
-            ]
+            columns = ["Mission", "Creation date", "Comment", "# Hosts", "# Services"]
             for mission in results:
-                color = 'light_green' if mission.name == highlight else None
-                data.append([
-                    Output.colored(mission.name, color=color),
-                    Output.colored(str(mission.creation_date), color=color),
-                    Output.colored(StringUtils.wrap(mission.comment, 50), color=color),
-                    Output.colored(len(mission.hosts), color=color),
-                    Output.colored(mission.get_nb_services(), color=color),                
-                ])
+                color = "light_green" if mission.name == highlight else None
+                data.append(
+                    [
+                        Output.colored(mission.name, color=color),
+                        Output.colored(str(mission.creation_date), color=color),
+                        Output.colored(
+                            StringUtils.wrap(mission.comment, 50), color=color
+                        ),
+                        Output.colored(len(mission.hosts), color=color),
+                        Output.colored(mission.get_nb_services(), color=color),
+                    ]
+                )
             Output.table(columns, data, hrules=False)
 
-
-    #------------------------------------------------------------------------------------
+    # ------------------------------------------------------------------------------------
 
     def add(self, name):
         """
@@ -74,8 +68,9 @@ class MissionsRequester(Requester):
         """
         mission = self.sqlsess.query(Mission).filter(Mission.name == name).first()
         if mission:
-            logger.warning('A mission named "{name}" already exists'.format(
-                name=mission.name))
+            logger.warning(
+                'A mission named "{name}" already exists'.format(name=mission.name)
+            )
             return False
         else:
             self.sqlsess.add(Mission(name=name))
@@ -83,20 +78,18 @@ class MissionsRequester(Requester):
             logger.success('Mission "{name}" successfully added'.format(name=name))
             return True
 
-
-    #------------------------------------------------------------------------------------
+    # ------------------------------------------------------------------------------------
 
     def delete(self):
         """Delete selected missions in database"""
         results = self.get_results()
         if not results:
-            logger.error('No mission with this name')
+            logger.error("No mission with this name")
         else:
             for r in results:
                 self.sqlsess.delete(r)
             self.sqlsess.commit()
-            logger.success('Mission deleted')
-
+            logger.success("Mission deleted")
 
     def reset(self):
         """Delete all missions in database (re-create a fresh "default" mission)"""
@@ -111,10 +104,9 @@ class MissionsRequester(Requester):
         self.sqlsess.query(Service).delete()
         self.sqlsess.query(Vuln).delete()
         self.sqlsess.commit()
-        self.sqlsess.add(Mission(name='default', comment='Default scope'))
+        self.sqlsess.add(Mission(name="default", comment="Default scope"))
         self.sqlsess.commit()
         logger.success('All missions deleted & fresh "default" mission created')
-
 
     def rename(self, old, new):
         """
@@ -122,25 +114,30 @@ class MissionsRequester(Requester):
         :param str old: Name of the mission to rename
         :param str new: New mission name
         """
-        if old == 'default':
-            logger.warning('Default mission cannot be renamed')
+        if old == "default":
+            logger.warning("Default mission cannot be renamed")
             return False
 
         mission = self.sqlsess.query(Mission).filter(Mission.name == old).first()
         if mission:
-            new_mission = self.sqlsess.query(Mission).filter(Mission.name == new).first()
+            new_mission = (
+                self.sqlsess.query(Mission).filter(Mission.name == new).first()
+            )
             if new_mission:
-                logger.warning('A mission named "{name}" already exists'.format(name=new))
+                logger.warning(
+                    'A mission named "{name}" already exists'.format(name=new)
+                )
                 return False
             else:
                 mission.name = new
                 self.sqlsess.commit()
-                logger.success('Mission renamed: {old} -> {new}'.format(old=old, new=new))
+                logger.success(
+                    "Mission renamed: {old} -> {new}".format(old=old, new=new)
+                )
                 return True
         else:
             logger.warning('Mission "{name}" doesn\'t exists'.format(name=old))
             return False
-
 
     def edit_comment(self, comment):
         """
@@ -149,9 +146,9 @@ class MissionsRequester(Requester):
         """
         results = self.get_results()
         if not results:
-            logger.error('No mission with this name')
+            logger.error("No mission with this name")
         else:
             for r in results:
                 r.comment = comment
             self.sqlsess.commit()
-            logger.success('Comment edited')
+            logger.success("Comment edited")

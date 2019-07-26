@@ -9,11 +9,9 @@ from lib.output.Logger import logger
 
 
 class WebTechnoDetector:
-
     def __init__(self, url):
         self.url = url
         self.technos = list()
-
 
     def detect(self):
         """
@@ -25,9 +23,8 @@ class WebTechnoDetector:
         self.technos = self.__run_wappalyzer()
 
         # TODO: Add other detection methods
-        
-        return self.technos
 
+        return self.technos
 
     def print_technos(self):
         """
@@ -35,13 +32,12 @@ class WebTechnoDetector:
         """
         if len(self.technos) > 0:
             data = list()
-            columns = ['Name', 'Version']
+            columns = ["Name", "Version"]
             for t in self.technos:
-                data.append([t['name'], t['version']])
+                data.append([t["name"], t["version"]])
             Output.table(columns, data, hrules=False)
         else:
-            logger.warning('No technology detected')
-
+            logger.warning("No technology detected")
 
     def __run_wappalyzer(self):
         """Detect web technologies using Wappalyzer"""
@@ -51,13 +47,10 @@ class WebTechnoDetector:
             apps = wappalyzer.analyze()
 
             for appName, app in apps.items():
-                f = {
-                    'name': app.name,
-                    'version': app.version,
-                }
+                f = {"name": app.name, "version": app.version}
                 technos.append(f)
             del wappalyzer
         except Exception as e:
-            logger.error('Error with Wappalyzer: {}'.format(e))
-            return ''
+            logger.error("Error with Wappalyzer: {}".format(e))
+            return ""
         return technos

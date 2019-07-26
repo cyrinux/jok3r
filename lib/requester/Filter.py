@@ -7,7 +7,6 @@ from lib.core.Constants import *
 
 
 class Filter:
-
     def __init__(self, operator=FilterOperator.AND):
         """
         Create a Filter object.
@@ -21,8 +20,7 @@ class Filter:
         self.conditions = list()
         self.operator = operator
 
-
-    #------------------------------------------------------------------------------------
+    # ------------------------------------------------------------------------------------
 
     def add_condition(self, condition):
         """
@@ -31,9 +29,8 @@ class Filter:
         """
         self.conditions.append(condition)
 
+    # ------------------------------------------------------------------------------------
 
-    #------------------------------------------------------------------------------------
-    
     def translate(self):
         """Combine all conditions together to create Sqlalchemy filter"""
         result = None
@@ -41,10 +38,10 @@ class Filter:
             translated = c.translate()
             if translated is not None:
                 if result is None:
-                    result = (translated)
+                    result = translated
                 else:
                     if self.operator == FilterOperator.AND:
-                        result = result & (translated)
+                        result = result & translated
                     else:
-                        result = result | (translated)
+                        result = result | translated
         return result

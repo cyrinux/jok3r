@@ -3,4 +3,5 @@
 
 from .Wappalyzer import *
 from .WebTechnoDetector import *
+
 pass

@@ -9,9 +9,8 @@ import textwrap
 
 
 class StringUtils:
-
     @staticmethod
-    def clean(string, allowed_specials=('_', '-', '.', ' ')):
+    def clean(string, allowed_specials=("_", "-", ".", " ")):
         """
         Remove non-alphanumeric characters from a string, except some
         specified ones.
@@ -21,8 +20,7 @@ class StringUtils:
         :return: Cleaned string
         :rtype: str
         """
-        return ''.join(c for c in string if c.isalnum() or c in allowed_specials)
-
+        return "".join(c for c in string if c.isalnum() or c in allowed_specials)
 
     @staticmethod
     def shorten(string, maxlength):
@@ -37,8 +35,7 @@ class StringUtils:
         if len(string) <= maxlength:
             return string
         else:
-            return textwrap.wrap(string, maxlength)[0]+'...'
-
+            return textwrap.wrap(string, maxlength)[0] + "..."
 
     @staticmethod
     def wrap(string, maxlength):
@@ -49,10 +46,9 @@ class StringUtils:
         :param int maxlength: Maximum length for each line        
         """
         if not string:
-            return ''
+            return ""
         else:
-            return '\n'.join(textwrap.wrap(string, maxlength))
-
+            return "\n".join(textwrap.wrap(string, maxlength))
 
     @staticmethod
     def remove_non_printable_chars(string):
@@ -64,10 +60,10 @@ class StringUtils:
         :rtype: str
         """
         printable = set(
-            """0123456789abcdefghijklmnopqrstuvwxyzäâàçéèêëïîìöôòüûù""" \
-            """ABCDEFGHIJKLMNOPQRSTUVWXYZ!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~ """)
-        return ''.join(filter(lambda x: x in printable, string))
-
+            """0123456789abcdefghijklmnopqrstuvwxyzäâàçéèêëïîìöôòüûù"""
+            """ABCDEFGHIJKLMNOPQRSTUVWXYZ!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~ """
+        )
+        return "".join(filter(lambda x: x in printable, string))
 
     @staticmethod
     def remove_ansi_escape(string):
@@ -93,9 +89,8 @@ class StringUtils:
         #      r'(\[\?\d;\d0c)|' \
         #      r'(\d;\dR))'
         # ansi_escape = re.compile(ansi_regex, flags=re.IGNORECASE)
-        ansi_escape = re.compile(r'\x1B\[[0-?]*[ -/]*[@-~]', flags=re.IGNORECASE)
-        return ansi_escape.sub('', string)
-
+        ansi_escape = re.compile(r"\x1B\[[0-?]*[ -/]*[@-~]", flags=re.IGNORECASE)
+        return ansi_escape.sub("", string)
 
     @staticmethod
     def interpret_ansi_escape_clear_lines(string):
@@ -109,11 +104,10 @@ class StringUtils:
         """
         out = string
         while True:
-            out, n = re.subn(r'\n.*\x1b\[1K', '\n', out, re.IGNORECASE)
-            if n==0:
+            out, n = re.subn(r"\n.*\x1b\[1K", "\n", out, re.IGNORECASE)
+            if n == 0:
                 break
         return out
-
 
     @staticmethod
     def surrounding_text(text, pattern, nb_words):
@@ -128,17 +122,26 @@ class StringUtils:
             and after)
         :rtype: list(str)
         """
-        before = '((\S+)\s+){0,'+str(nb_words)+'}'
-        after = '(\s+(\S+)){0,'+str(nb_words)+'}'
-        pattern = '\S*(?P<search>{})\S*'.format(pattern.replace('%', '.*?'))
-        m = re.finditer('{before}{pattern}{after}'.format(
-            before=before,
-            pattern=pattern,
-            after=after), text, re.MULTILINE|re.IGNORECASE)
+        before = "((\S+)\s+){0," + str(nb_words) + "}"
+        after = "(\s+(\S+)){0," + str(nb_words) + "}"
+        pattern = "\S*(?P<search>{})\S*".format(pattern.replace("%", ".*?"))
+        m = re.finditer(
+            "{before}{pattern}{after}".format(
+                before=before, pattern=pattern, after=after
+            ),
+            text,
+            re.MULTILINE | re.IGNORECASE,
+        )
 
         results = list()
         for a in m:
-            results.append(a.group(0).replace(a.group('search'), 
-                colored.stylize(a.group('search'), 
-                    (colored.fg('light_yellow') + colored.attr('bold')))))
+            results.append(
+                a.group(0).replace(
+                    a.group("search"),
+                    colored.stylize(
+                        a.group("search"),
+                        (colored.fg("light_yellow") + colored.attr("bold")),
+                    ),
+                )
+            )
         return results

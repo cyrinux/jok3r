@@ -8,16 +8,15 @@ import sys
 
 from lib.output.Logger import logger
 
-class ProcessLauncher:
 
+class ProcessLauncher:
     def __init__(self, command):
         """
         :param str command: Command line
         """
         self.command = command.strip()
 
-
-    #------------------------------------------------------------------------------------
+    # ------------------------------------------------------------------------------------
 
     def start(self):
         """
@@ -27,7 +26,6 @@ class ProcessLauncher:
         :rtype: str
         """
         return self.__create_subprocess(self.command)
-
 
     def start_in_new_window(self, title=None):
         """
@@ -39,13 +37,12 @@ class ProcessLauncher:
         :return: Command output
         :rtype: str
         """
-        cmd =  'gnome-terminal '
+        cmd = "gnome-terminal "
         if title is not None:
             cmd += '--title="{0}" '.format(title.replace('"', '\\"'))
-        cmd += '--geometry=140x80 '
-        cmd += '--command="bash -c \'{0}; exec bash\'"'.format(self.command)
+        cmd += "--geometry=140x80 "
+        cmd += "--command=\"bash -c '{0}; exec bash'\"".format(self.command)
         return self.__create_subprocess(cmd)
-
 
     def start_in_new_tab(self):
         """
@@ -55,17 +52,16 @@ class ProcessLauncher:
         :return: Command output
         :rtype: str
         """
-        cmd  = 'WID=$(xprop -root | grep "_NET_ACTIVE_WINDOW(WINDOW)"| '
-        cmd += 'awk \'{print $5}\');'
-        cmd += 'xdotool windowfocus $WID;'
-        cmd += 'xdotool key ctrl+shift+t;'
+        cmd = 'WID=$(xprop -root | grep "_NET_ACTIVE_WINDOW(WINDOW)"| '
+        cmd += "awk '{print $5}');"
+        cmd += "xdotool windowfocus $WID;"
+        cmd += "xdotool key ctrl+shift+t;"
         cmd += 'xdotool type "{0}";'.format(self.command)
-        cmd += 'xdotool key Return'
+        cmd += "xdotool key Return"
         return self.__create_subprocess(cmd)
         # TOTEST: Stdout ?
 
-
-    #------------------------------------------------------------------------------------
+    # ------------------------------------------------------------------------------------
 
     def __create_subprocess(self, cmd):
         """
@@ -76,22 +72,20 @@ class ProcessLauncher:
         :return: Command output (stdout+stderr)
         :rtype: str
         """
-        output = ''
-        
+        output = ""
+
         try:
-            proc = subprocess.Popen(cmd, 
-                                    shell=True, 
-                                    stdout=subprocess.PIPE, 
-                                    stderr=subprocess.STDOUT)
+            proc = subprocess.Popen(
+                cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT
+            )
 
             # for line in iter(proc.stdout.readline, b''):
             #     out = line.decode(sys.stdout.encoding)
             #     sys.stdout.write(out)
             #     output += out
 
-            #output = proc.stdout.read()
-            #print(output)
-
+            # output = proc.stdout.read()
+            # print(output)
 
             # Agressivelly get the output
             while True:
@@ -105,11 +99,12 @@ class ProcessLauncher:
                     pass
 
                 # Break if process has finished
-                if out == ''  and proc.poll() != None:
+                if out == "" and proc.poll() != None:
                     break
 
         except Exception as e:
-            logger.error('Error when trying to run command: {exception}'.format(
-                exception=e))
+            logger.error(
+                "Error when trying to run command: {exception}".format(exception=e)
+            )
 
         return output

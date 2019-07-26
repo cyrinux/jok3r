@@ -7,17 +7,20 @@ from lib.controller.Controller import Controller
 
 
 class ToolboxController(Controller):
-
     def run(self):
 
-        service = self.arguments.args.show_toolbox_for_svc \
-            or self.arguments.args.install_for_svc \
-            or self.arguments.args.update_for_svc \
+        service = (
+            self.arguments.args.show_toolbox_for_svc
+            or self.arguments.args.install_for_svc
+            or self.arguments.args.update_for_svc
             or self.arguments.args.uninstall_for_svc
+        )
 
-        toolname = self.arguments.args.install_tool \
-            or self.arguments.args.update_tool \
+        toolname = (
+            self.arguments.args.install_tool
+            or self.arguments.args.update_tool
             or self.arguments.args.uninstall_tool
+        )
 
         # --fast
         fastmode = self.arguments.args.fast_mode
@@ -65,6 +68,3 @@ class ToolboxController(Controller):
         # --uninstall-all
         elif self.arguments.args.uninstall_all:
             self.settings.toolbox.remove_all()
-
-
-
