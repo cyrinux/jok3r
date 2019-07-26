@@ -98,9 +98,8 @@ class Wappalyzer(requests.Session):
             self.data.text,
             re.IGNORECASE,
         )
-        language = None
+
         if matches:
-            language = matches.groups()[0]
             matches = matches.group()
 
         for appName in self.apps:
@@ -333,9 +332,9 @@ def getSimple(url):
     """
     Output example:
     {
-        'cdn': ['CloudFlare'], 
-        'cms': ['SPIP'], 
-        'javascript-libraries': ['XRegExp', 'jQuery'], 
+        'cdn': ['CloudFlare'],
+        'cms': ['SPIP'],
+        'javascript-libraries': ['XRegExp', 'jQuery'],
         'programming-languages': ['PHP']
     }
     """

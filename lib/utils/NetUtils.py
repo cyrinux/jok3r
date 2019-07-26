@@ -118,7 +118,7 @@ class NetUtils:
 
         :param str ip: Target IP address
         :param int port: Port number
-        :return: Dict with retrieved information or None if error or 
+        :return: Dict with retrieved information or None if error or
             port unreachable
         :rtype: dict|None
         """
@@ -203,7 +203,7 @@ class NetUtils:
     @staticmethod
     def dns_lookup(host):
         """
-        Get IP corresponding to a given hostname 
+        Get IP corresponding to a given hostname
         Return the first IPv4 in the list of IPs if available, otherwise the first IPv6
         """
         ip_list = list()

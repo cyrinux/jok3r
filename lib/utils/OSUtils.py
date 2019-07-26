@@ -14,7 +14,7 @@ class OSUtils:
         Some examples:
         - ostype: Windows
         - product: Microsoft HTTPAPI... : Microsoft -> Windows
-        - product: IBM HTTP Server version: 6.1.0.47 extrainfo: Derived from 
+        - product: IBM HTTP Server version: 6.1.0.47 extrainfo: Derived from
             Apache 2.0.47; Unix -> Linux
         - product: Apache httpd version: 2.4.34 extrainfo: (Red Hat) -> Red Hat Linux
         """
@@ -37,7 +37,7 @@ class OSUtils:
         """
         Try to get device type.
 
-        List of device types returned by Nmap: 
+        List of device types returned by Nmap:
         https://nmap.org/book/osdetect-device-types.html
 
         :param str os: Full OS name

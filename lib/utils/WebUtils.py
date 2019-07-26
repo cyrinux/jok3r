@@ -37,7 +37,7 @@ class WebUtils:
         """
         Switch between HTTP and HTTPS in the url
         http://  -> https://
-        https:// -> http:// 
+        https:// -> http://
         """
         newurl = ""
         if url.startswith("http://"):
@@ -116,7 +116,7 @@ class WebUtils:
             if r1.data or r2.data:
                 if regex.search(str(r1.data)) or regex.search(str(r2.data)):
                     return https_url
-        except Exception as e:
+        except:
             pass
         try:
             r1 = http.request("GET", http_url, timeout=timeout)
@@ -131,8 +131,7 @@ class WebUtils:
                 if regex.search(str(r1.data)) or regex.search(str(r2.data)):
                     return http_url
             return ""
-        except Exception as e:
-            # print e
+        except:
             return ""
 
     @staticmethod

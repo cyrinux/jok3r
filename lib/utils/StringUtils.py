@@ -43,7 +43,7 @@ class StringUtils:
         Wrap a string on multilines.
 
         :param str string: String to wrap
-        :param int maxlength: Maximum length for each line        
+        :param int maxlength: Maximum length for each line
         """
         if not string:
             return ""
@@ -69,7 +69,7 @@ class StringUtils:
     def remove_ansi_escape(string):
         """
         Remove ANSI escape sequences from a string.
-        
+
         :param str string: String to process
         :return: Cleaned string
         :rtype: str
@@ -95,12 +95,12 @@ class StringUtils:
     @staticmethod
     def interpret_ansi_escape_clear_lines(string):
         """
-        Interpret ANSI escape sequence that clear the current line: 
+        Interpret ANSI escape sequence that clear the current line:
         \x1b[1K
 
         :param str string: String to process
         :return: Output string
-        :rtype: str 
+        :rtype: str
         """
         out = string
         while True:
@@ -118,7 +118,7 @@ class StringUtils:
         :param str pattern: Pattern to look for (accepts wildcard "%")
         :param int nb_words: (Maximum) Number of words to keep before and after
             the pattern
-        :return: Matching strings surrounded by specified number of words (before 
+        :return: Matching strings surrounded by specified number of words (before
             and after)
         :rtype: list(str)
         """
